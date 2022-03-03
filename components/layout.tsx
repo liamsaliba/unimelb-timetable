@@ -1,9 +1,7 @@
 import Head from "next/head";
 import styles from "./layout.module.scss";
 
-
-
-export const siteTitle = "Unimelb timetabling thing";
+export const siteTitle = "Unimelb Timetable";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -17,7 +15,7 @@ export default function Layout({ children, home }: LayoutProps) {
         <link rel="icon" href="/favicon.ico" />
         <meta
           name="description"
-          content="Unimelb timetabling thing"
+          content="what class is in what room at what time in what semester at what university?"
         />
         {/* <meta
           property="og:image"
@@ -30,6 +28,13 @@ export default function Layout({ children, home }: LayoutProps) {
       </Head>
       <header></header>
       <main>{children}</main>
+      <footer>
+        Liam Saliba, March 2022.{" "}
+        <a href="https://github.com/liamsaliba/unimelb-timetable">
+          Open Source
+        </a>{" "}
+        - antd, next.js, gh-pages
+      </footer>
     </div>
   );
 }

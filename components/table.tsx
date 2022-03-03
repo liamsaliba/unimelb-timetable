@@ -11,7 +11,7 @@ const TableComponent = ({ data }: { data: Timetable }) => {
         dataSource={data}
         size="middle"
         pagination={{ pageSize: 50 }}
-        scroll={{ y: "70vh" }}
+        scroll={{ y: "60vh" }}
       >
         <Column
           title="Location"
