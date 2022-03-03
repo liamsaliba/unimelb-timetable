@@ -42,11 +42,12 @@ export default function Home({ timetableData }: { timetableData: Timetable }) {
       return;
     }
 
+    value = value.toLowerCase();
     const newData = timetableData.filter((event) => {
       return (
-        (event.location || "Online").includes(value) ||
-        event.subj_code.includes(value) ||
-        event.subj_name.includes(value)
+        (event.location || "Online").toLowerCase().includes(value) ||
+        event.subj_code.toLowerCase().includes(value) ||
+        event.subj_name.toLowerCase().includes(value)
       );
     });
     setData(newData);
