@@ -5,7 +5,7 @@ import { GetStaticProps } from "next";
 import Table from "../components/table";
 import "antd/dist/antd.css";
 import { useMemo, useState } from "react";
-import { Select } from "antd";
+import { AutoComplete, Select } from "antd";
 
 interface SelectItem {
   value: string;
@@ -58,7 +58,7 @@ export default function Home({ timetableData }: { timetableData: Timetable }) {
         <title>{siteTitle}</title>
       </Head>
       <section>
-        <Select
+        <AutoComplete
           allowClear
           style={{ width: "100%" }}
           showSearch
