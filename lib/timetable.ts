@@ -15,6 +15,7 @@ export interface Event {
   subj_name: string;
   day_no: number;
   subj: string;
+  time?: string;
 }
 
 export type Timetable = Event[];
@@ -26,6 +27,10 @@ export function getTimetableData() {
   timetable.sort((a, b) => a.start.localeCompare(b.start));
   timetable.sort((a, b) => a.day_no - b.day_no);
   timetable.sort((a, b) => a.location?.localeCompare(b.location));
+
+  timetable.forEach((event) => {
+    event.time = `${event.day} ${event.start} - ${event.finish}`;
+  });
 
   return timetable;
 }

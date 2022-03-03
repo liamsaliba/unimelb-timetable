@@ -23,9 +23,10 @@ const TableComponent = ({ data }: { data: Timetable }) => {
             record.location.includes(value)
           }
         />
-        <Column title="Day" dataIndex="day" key="day" width={100} />
-        <Column title="Start" dataIndex="start" key="start" width={60} />
-        <Column title="Finish" dataIndex="finish" key="finish" width={60} />
+        <Column title="Time" dataIndex="time" key="time" />
+        {/* <Column title="Day" dataIndex="day" key="day" width={100} /> */}
+        {/* <Column title="Start" dataIndex="start" key="start" width={60} /> */}
+        {/* <Column title="Finish" dataIndex="finish" key="finish" width={60} /> */}
         <Column
           title="Class code"
           dataIndex="class_code"
