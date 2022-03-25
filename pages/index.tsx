@@ -6,6 +6,10 @@ import Table from "../components/table";
 import Search from "../components/search";
 import "antd/dist/antd.css";
 import { useState } from "react";
+import { Tabs } from "antd";
+import { TableOutlined, CalendarOutlined } from "@ant-design/icons";
+
+const { TabPane } = Tabs;
 
 export default function Home({ timetableData }: { timetableData: Timetable }) {
   const [data, setData] = useState(timetableData);
@@ -34,7 +38,31 @@ export default function Home({ timetableData }: { timetableData: Timetable }) {
       </Head>
       <section>
         <Search data={data} onChange={onChange} />
-        <Table data={data} />
+        <Tabs defaultActiveKey="1">
+          <TabPane
+            tab={
+              <span>
+                <TableOutlined />
+                Table
+              </span>
+            }
+            key="1"
+          >
+            <Table data={data} />
+          </TabPane>
+          <TabPane
+            disabled
+            tab={
+              <span>
+                <CalendarOutlined />
+                Calendar
+              </span>
+            }
+            key="2"
+          >
+            To be implemented
+          </TabPane>
+        </Tabs>
       </section>
     </Layout>
   );
