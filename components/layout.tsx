@@ -33,7 +33,8 @@ export default function Layout({ children, home }: LayoutProps) {
         <a href="https://github.com/liamsaliba/unimelb-timetable">
           Open Source
         </a>{" "}
-        - antd, next.js, gh-pages
+        - antd, next.js, gh-pages. Data scraped from{" "}
+        <a href="https://sws.unimelb.edu.au/">Unimelb's website.</a>
       </footer>
     </div>
   );
