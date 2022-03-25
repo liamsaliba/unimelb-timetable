@@ -35,10 +35,6 @@ const getAutofillItems = (data: Timetable): SelectItem[] => {
 export default function Home({ timetableData }: { timetableData: Timetable }) {
   const options = useMemo(() => getAutofillItems(timetableData), timetableData);
 
-  const fuse = new Fuse(timetableData, {
-    keys: ['subj_name', 'subj_code', 'class_code', 'location']
-  })
-
   const [data, setData] = useState(timetableData);
 
   const onChange = (value: string) => {
@@ -50,7 +46,7 @@ export default function Home({ timetableData }: { timetableData: Timetable }) {
     value = value.toLowerCase();
     const newData = timetableData.filter((event) => {
       return (
-        (event.location || "Online").toLowerCase().includes(value) ||
+        event.location.toLowerCase().includes(value) ||
         event.subj_code.toLowerCase().includes(value) ||
         event.subj_name.toLowerCase().includes(value)
       );
