@@ -6,6 +6,7 @@ import Table from "../components/table";
 import "antd/dist/antd.css";
 import { useMemo, useState } from "react";
 import { AutoComplete, Select } from "antd";
+import Fuse from "fuse.js"
 
 interface SelectItem {
   value: string;
@@ -47,14 +48,7 @@ export default function Home({ timetableData }: { timetableData: Timetable }) {
       return;
     }
 
-    value = value.toLowerCase();
-    const newData = timetableData.filter((event) => {
-      return (
-        (event.location || "Online").toLowerCase().includes(value) ||
-        event.subj_code.toLowerCase().includes(value) ||
-        event.subj_name.toLowerCase().includes(value)
-      );
-    });
+    const newData = fuse.search(value).map(({item}) => item);
     setData(newData);
   };
 
