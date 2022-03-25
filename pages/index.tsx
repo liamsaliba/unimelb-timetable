@@ -20,14 +20,19 @@ export default function Home({ timetableData }: { timetableData: Timetable }) {
       return;
     }
 
-    value = value.toLowerCase();
+    const valueParts = value.toLowerCase().split(" ");
+
     const newData = timetableData.filter((event) => {
-      return (
-        event.location.toLowerCase().includes(value) ||
-        event.subj_code.toLowerCase().includes(value) ||
-        event.subj_name.toLowerCase().includes(value)
+      const eventValues = [
+        event.location.toLowerCase(),
+        event.subj_code.toLowerCase(),
+        event.subj_name.toLowerCase(),
+      ];
+      return valueParts.every((val) =>
+        eventValues.some((v) => v.includes(val))
       );
     });
+
     setData(newData);
   };
 

@@ -58,9 +58,19 @@ const Search = ({
       optionFilterProp="label"
       options={options}
       onChange={onChange}
-      filterOption={(input, option) =>
-        option.value.toLowerCase().indexOf(input.toLowerCase()) >= 0
-      }
+      filterOption={(input, option_) => {
+        input = input.toLowerCase();
+        const valueParts = input.split(" ");
+        const option = option_.value.toLowerCase();
+        const optionParts = option.split(" ");
+        console.log(optionParts);
+        return (
+          valueParts.every((val) => option.includes(val)) ||
+          input
+            .split("")
+            .every((c, i) => optionParts.length > i && optionParts[i][0] == c)
+        );
+      }}
       filterSort={(optionA, optionB) =>
         optionA.value.toLowerCase().localeCompare(optionB.value.toLowerCase())
       }
