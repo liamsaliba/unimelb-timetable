@@ -5,23 +5,39 @@ import { Timetable } from "../lib/timetable";
 
 interface SelectItem {
   value: string;
-  label: string;
+  label: React.ReactNode | string;
 }
 
 const getAutofillItems = (data: Timetable): SelectItem[] => {
-  const places = new Set<string>(
-    data.map((event) => event.location || "Online")
-  );
-  const subjects = new Set<string>(data.map((event) => event.subj_code));
-  const subject_names = new Set<string>(data.map((event) => event.subj_name));
+  const getUnique = (selector: (Event) => string) => [
+    ...new Set<string>(data.map(selector)),
+  ];
 
-  const all_items = [...places, ...subjects, ...subject_names];
+  const makeItems = (selector: (Event) => string, decorator: string) =>
+    getUnique(selector).map((item) => ({
+      value: item,
+      label: (
+        <div className="demo-option-label-item">
+          {item}
+          <span
+            style={{
+              paddingLeft: "0.2em",
+              textTransform: "uppercase",
+              fontSize: "0.8em",
+              color: "gray",
+            }}
+          >
+            {decorator}
+          </span>
+        </div>
+      ),
+    }));
 
-  const vals: SelectItem[] = all_items.map((item) => ({
-    value: item,
-    label: item,
-  }));
-  return vals;
+  return [
+    ...makeItems((e) => e.location, "Room"),
+    ...makeItems((e) => e.subj_code, "Subj"),
+    ...makeItems((e) => e.subj_name, "Subj"),
+  ];
 };
 
 const Search = ({
@@ -43,10 +59,10 @@ const Search = ({
       options={options}
       onChange={onChange}
       filterOption={(input, option) =>
-        option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
+        option.value.toLowerCase().indexOf(input.toLowerCase()) >= 0
       }
       filterSort={(optionA, optionB) =>
-        optionA.label.toLowerCase().localeCompare(optionB.label.toLowerCase())
+        optionA.value.toLowerCase().localeCompare(optionB.value.toLowerCase())
       }
     />
   );
