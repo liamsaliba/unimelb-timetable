@@ -1,4 +1,4 @@
-import { Select, Table } from "antd";
+import { Table } from "antd";
 
 const { Column } = Table;
 

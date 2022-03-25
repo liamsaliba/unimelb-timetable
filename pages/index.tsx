@@ -12,31 +12,36 @@ interface SelectItem {
   label: string;
 }
 
+const getAutofillItems = (data: Timetable): SelectItem[] => {
+  const places = new Set<string>(
+    data.map((event) => event.location || "Online")
+  );
+  const subjects = new Set<string>(
+    data.map((event) => event.subj_code)
+  );
+  const subject_names = new Set<string>(
+    data.map((event) => event.subj_name)
+  );
+
+  const all_items = [...places, ...subjects, ...subject_names];
+
+  const vals: SelectItem[] = all_items.map((item) => ({
+    value: item,
+    label: item,
+  }));
+  return vals;
+};
+
 export default function Home({ timetableData }: { timetableData: Timetable }) {
-  const options = useMemo(() => {
-    const places = new Set<string>(
-      timetableData.map((event) => event.location || "Online")
-    );
-    const subjects = new Set<string>(
-      timetableData.map((event) => event.subj_code)
-    );
-    const subject_names = new Set<string>(
-      timetableData.map((event) => event.subj_name)
-    );
+  const options = useMemo(() => getAutofillItems(timetableData), timetableData);
 
-    const all_items = [...places, ...subjects, ...subject_names];
-
-    const vals: SelectItem[] = all_items.map((item) => ({
-      value: item,
-      label: item,
-    }));
-    return vals;
-  }, timetableData);
+  const fuse = new Fuse(timetableData, {
+    keys: ['subj_name', 'subj_code', 'class_code', 'location']
+  })
 
   const [data, setData] = useState(timetableData);
 
   const onChange = (value: string) => {
-    console.log(value);
     if (value == undefined) {
       setData(timetableData);
       return;
@@ -63,7 +68,7 @@ export default function Home({ timetableData }: { timetableData: Timetable }) {
           allowClear
           style={{ width: "100%" }}
           showSearch
-          placeholder="Search"
+          placeholder="Search (room, subject code, name)"
           optionFilterProp="label"
           options={options}
           onChange={onChange}

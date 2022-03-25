@@ -1,6 +1,6 @@
 import timetableEvents from "./timetable_subj.json";
 
-export interface Event {
+export interface FullEvent {
   class_code: string;
   description: string;
   day: string;
@@ -15,22 +15,33 @@ export interface Event {
   subj_name: string;
   day_no: number;
   subj: string;
-  time?: string;
+}
+
+export const fullTimetable = timetableEvents as FullEvent[];
+
+export interface Event {
+  class_code: string;
+  location: string;
+  time: string;
+  subj_name: string;
+  subj_code: string;
 }
 
 export type Timetable = Event[];
 
-export const timetable = timetableEvents as Timetable;
 
 export function getTimetableData() {
-  // sort by location then day_no then start
-  timetable.sort((a, b) => a.start.localeCompare(b.start));
-  timetable.sort((a, b) => a.day_no - b.day_no);
-  timetable.sort((a, b) => a.location?.localeCompare(b.location));
+  const timetable = fullTimetable
+  .sort((a, b) => a.start.localeCompare(b.start))
+  .sort((a, b) => a.day_no - b.day_no)
+  .sort((a, b) => a.location?.localeCompare(b.location))
+  .map((event: FullEvent) => ({
+    class_code: event.class_code,
+    location: event.location || "Online",
+    subj_name: event.subj_name,
+    subj_code: event.subj_code,
+    time: `${event.day} ${event.start} - ${event.finish}`,
+  }));
 
-  timetable.forEach((event) => {
-    event.time = `${event.day} ${event.start} - ${event.finish}`;
-  });
-
-  return timetable;
+  return timetable as Timetable;
 }
