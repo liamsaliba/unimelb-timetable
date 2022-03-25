@@ -3,42 +3,15 @@ import Layout, { siteTitle } from "../components/layout";
 import { getTimetableData, Timetable } from "../lib/timetable";
 import { GetStaticProps } from "next";
 import Table from "../components/table";
+import Search from "../components/search";
 import "antd/dist/antd.css";
-import { useMemo, useState } from "react";
-import { AutoComplete, Select } from "antd";
-
-interface SelectItem {
-  value: string;
-  label: string;
-}
-
-const getAutofillItems = (data: Timetable): SelectItem[] => {
-  const places = new Set<string>(
-    data.map((event) => event.location || "Online")
-  );
-  const subjects = new Set<string>(
-    data.map((event) => event.subj_code)
-  );
-  const subject_names = new Set<string>(
-    data.map((event) => event.subj_name)
-  );
-
-  const all_items = [...places, ...subjects, ...subject_names];
-
-  const vals: SelectItem[] = all_items.map((item) => ({
-    value: item,
-    label: item,
-  }));
-  return vals;
-};
+import { useState } from "react";
 
 export default function Home({ timetableData }: { timetableData: Timetable }) {
-  const options = useMemo(() => getAutofillItems(timetableData), timetableData);
-
   const [data, setData] = useState(timetableData);
 
   const onChange = (value: string) => {
-    if (value == undefined) {
+    if (value == undefined || value == "") {
       setData(timetableData);
       return;
     }
@@ -60,23 +33,7 @@ export default function Home({ timetableData }: { timetableData: Timetable }) {
         <title>{siteTitle}</title>
       </Head>
       <section>
-        <AutoComplete
-          allowClear
-          style={{ width: "100%" }}
-          showSearch
-          placeholder="Search (room, subject code, name)"
-          optionFilterProp="label"
-          options={options}
-          onChange={onChange}
-          filterOption={(input, option) =>
-            option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
-          }
-          filterSort={(optionA, optionB) =>
-            optionA.label
-              .toLowerCase()
-              .localeCompare(optionB.label.toLowerCase())
-          }
-        />
+        <Search data={data} onChange={onChange} />
         <Table data={data} />
       </section>
     </Layout>
