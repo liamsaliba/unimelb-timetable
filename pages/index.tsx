@@ -5,22 +5,25 @@ import { GetStaticProps } from "next";
 import Table from "../components/table";
 import Search from "../components/search";
 import "antd/dist/antd.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Tabs } from "antd";
 import { TableOutlined, CalendarOutlined } from "@ant-design/icons";
+import { useRouter } from "next/router";
 
 const { TabPane } = Tabs;
 
 export default function Home({ timetableData }: { timetableData: Timetable }) {
   const [data, setData] = useState(timetableData);
+  const router = useRouter();
 
-  const onChange = (value: string) => {
-    if (value == undefined || value == "") {
+  useEffect(() => {
+    const query = router.query.q as string;
+    if (query === "" || query === undefined) {
       setData(timetableData);
       return;
     }
 
-    const valueParts = value.toLowerCase().split(" ");
+    const parts = query.toLowerCase().split(" ");
 
     const newData = timetableData.filter((event) => {
       const eventValues = [
@@ -28,12 +31,23 @@ export default function Home({ timetableData }: { timetableData: Timetable }) {
         event.subj_code.toLowerCase(),
         event.subj_name.toLowerCase(),
       ];
-      return valueParts.every((val) =>
-        eventValues.some((v) => v.includes(val))
-      );
+      return parts.every((val) => eventValues.some((v) => v.includes(val)));
     });
 
     setData(newData);
+  }, [router.query.q]);
+
+  const onChange = (value: string) => {
+    if (value == undefined || value == "") {
+      value = "";
+    }
+    router.push(
+      {
+        pathname: "/",
+        query: { q: value },
+      },
+      undefined
+    );
   };
 
   return (
@@ -42,7 +56,11 @@ export default function Home({ timetableData }: { timetableData: Timetable }) {
         <title>{siteTitle}</title>
       </Head>
       <section>
-        <Search data={data} onChange={onChange} />
+        <Search
+          data={data}
+          onChange={onChange}
+          defaultValue={router.query.q as string}
+        />
         <Tabs defaultActiveKey="1">
           <TabPane
             tab={

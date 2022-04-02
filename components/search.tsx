@@ -33,9 +33,11 @@ const getAutofillItems = (data: Timetable): SelectItem[] => {
 const Search = ({
   data,
   onChange,
+  defaultValue,
 }: {
   data: Timetable;
   onChange: (value: string) => void;
+  defaultValue?: string;
 }) => {
   const options = useMemo(() => getAutofillItems(data), data);
 
@@ -44,6 +46,7 @@ const Search = ({
       allowClear
       style={{ width: "100%" }}
       showSearch
+      defaultValue={defaultValue}
       placeholder="Search (room, subject code, subject name)"
       optionFilterProp="label"
       options={options}
