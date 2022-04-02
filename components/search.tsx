@@ -1,5 +1,5 @@
 import { AutoComplete } from "antd";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { Timetable } from "../lib/timetable";
 import { SelectItem, Location, OptionItem } from "./item";
@@ -39,24 +39,34 @@ const Search = ({
   onChange: (value: string) => void;
   defaultValue?: string;
 }) => {
-  const options = useMemo(() => getAutofillItems(data), data);
+  const options = useMemo(() => getAutofillItems(data), [data]);
+  // value is controlled so that we can set defaultValue
+  const [value, setValue] = useState(defaultValue || "");
+
+  useEffect(() => {
+    setValue(defaultValue || "");
+  }, [defaultValue]);
+
+  const onFieldChange = (value: string) => {
+    setValue(value);
+    onChange(value);
+  };
 
   return (
     <AutoComplete
       allowClear
       style={{ width: "100%" }}
       showSearch
-      defaultValue={defaultValue}
+      value={value}
       placeholder="Search (room, subject code, subject name)"
       optionFilterProp="label"
       options={options}
-      onChange={onChange}
+      onChange={onFieldChange}
       filterOption={(input, option_) => {
         input = input.toLowerCase();
         const valueParts = input.split(" ");
         const option = option_.value.toLowerCase();
         const optionParts = option.split(" ");
-        console.log(optionParts);
         return (
           valueParts.every((val) => option.includes(val)) ||
           input
