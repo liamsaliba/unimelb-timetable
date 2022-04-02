@@ -45,3 +45,14 @@ export function getTimetableData() {
 
   return timetable as Timetable;
 }
+
+export function getEvents() {
+  const eg = "01 Mar 2022 - 12 Apr 2022, 26 Apr 2022 - 24 May 2022 ";
+  const events = eg.split(",").map((event) => {
+    const [start, finish] = event.split("-").map((date) => date.trim());
+    return {
+      start,
+      finish,
+    };
+  }
+}

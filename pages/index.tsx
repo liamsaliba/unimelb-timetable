@@ -10,6 +10,8 @@ import { Tabs } from "antd";
 import { TableOutlined, CalendarOutlined } from "@ant-design/icons";
 import { useRouter } from "next/router";
 import { debounce } from "lodash";
+import "react-big-calendar/lib/css/react-big-calendar.css";
+import Calendar from "../components/calendar";
 
 const { TabPane } = Tabs;
 
@@ -72,7 +74,6 @@ export default function Home({ timetableData }: { timetableData: Timetable }) {
             <Table data={data} />
           </TabPane>
           <TabPane
-            disabled
             tab={
               <span>
                 <CalendarOutlined />
@@ -81,7 +82,7 @@ export default function Home({ timetableData }: { timetableData: Timetable }) {
             }
             key="2"
           >
-            To be implemented
+            <Calendar data={data} />
           </TabPane>
         </Tabs>
       </section>
