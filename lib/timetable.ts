@@ -54,5 +54,5 @@ export function getEvents() {
       start,
       finish,
     };
-  }
+  });
 }
