@@ -1,4 +1,5 @@
 import { Table } from "antd";
+import { Location } from "./item";
 
 const { Column } = Table;
 
@@ -17,11 +18,7 @@ const TableComponent = ({ data }: { data: Timetable }) => {
           title="Location"
           dataIndex="location"
           key="location"
-          filterMode="tree"
-          filterSearch
-          onFilter={(value: string, record: Event) =>
-            record.location.includes(value)
-          }
+          render={(value, _, __) => <Location key={value} location={value} />}
         />
         <Column title="Time" dataIndex="time" key="time" />
         {/* <Column title="Day" dataIndex="day" key="day" width={100} /> */}

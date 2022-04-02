@@ -2,44 +2,34 @@ import { AutoComplete } from "antd";
 import { useMemo } from "react";
 
 import { Timetable } from "../lib/timetable";
-
-interface SelectItem {
-  value: string;
-  label: React.ReactNode | string;
-}
+import { SelectItem, Location, OptionItem } from "./item";
 
 const getAutofillItems = (data: Timetable): SelectItem[] => {
-  const getUnique = (selector: (Event) => string) => [
-    ...new Set<string>(data.map(selector)),
-  ];
-
-  const makeItems = (selector: (Event) => string, decorator: string) =>
-    getUnique(selector).map((item) => ({
-      value: item,
-      label: (
-        <div className="demo-option-label-item">
-          {item}
-          <span
-            style={{
-              paddingLeft: "0.2em",
-              textTransform: "uppercase",
-              fontSize: "0.8em",
-              color: "gray",
-            }}
-          >
-            {decorator}
-          </span>
-        </div>
-      ),
-    }));
+  // print all unique items by key subj_code, printing subj_code and subj_name
+  const subjects = [];
+  data.forEach((event) => {
+    if (!subjects.some((subj) => subj.code === event.subj_code)) {
+      subjects.push({
+        code: event.subj_code,
+        name: event.subj_name,
+      });
+    }
+  });
 
   return [
-    ...makeItems((e) => e.location, "Room"),
-    ...makeItems((e) => e.subj_code, "Subj"),
-    ...makeItems((e) => e.subj_name, "Subj"),
+    ...[...new Set(data.map((e) => e.location))].map((item) => ({
+      value: item,
+      label: <Location key={item} location={item} />,
+    })),
+    ...subjects.map(({ code, name }) =>
+      OptionItem({
+        value: `${code} ${name}`,
+        label: name,
+        secondaryLabel: code,
+      })
+    ),
   ];
 };
-
 const Search = ({
   data,
   onChange,
@@ -54,7 +44,7 @@ const Search = ({
       allowClear
       style={{ width: "100%" }}
       showSearch
-      placeholder="Search (room, subject code, name)"
+      placeholder="Search (room, subject code, subject name)"
       optionFilterProp="label"
       options={options}
       onChange={onChange}
