@@ -17,10 +17,9 @@ export const OptionLabel = ({
   secondaryLabel?: string;
 }) => (
   <div className="demo-option-label-item">
-    {label}
+    {label}{" "}
     <span
       style={{
-        paddingLeft: "0.4em",
         textTransform: "uppercase",
         fontSize: "0.8em",
         color: "gray",
