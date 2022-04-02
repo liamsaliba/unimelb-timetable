@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { Tabs } from "antd";
 import { TableOutlined, CalendarOutlined } from "@ant-design/icons";
 import { useRouter } from "next/router";
+import { debounce } from "lodash";
 
 const { TabPane } = Tabs;
 
@@ -37,18 +38,12 @@ export default function Home({ timetableData }: { timetableData: Timetable }) {
     setData(newData);
   }, [router.query.q]);
 
-  const onChange = (value: string) => {
-    if (value == undefined || value == "") {
-      value = "";
-    }
-    router.push(
-      {
-        pathname: "/",
-        query: { q: value },
-      },
-      undefined
-    );
-  };
+  const onSearchChange = debounce((value: string) => {
+    router.push({
+      pathname: "/",
+      query: value === undefined || value === "" ? {} : { q: value },
+    });
+  }, 500);
 
   return (
     <Layout home>
@@ -61,7 +56,7 @@ export default function Home({ timetableData }: { timetableData: Timetable }) {
       <section>
         <Search
           data={data}
-          onChange={onChange}
+          onChange={onSearchChange}
           defaultValue={router.query.q as string}
         />
         <Tabs defaultActiveKey="1">
