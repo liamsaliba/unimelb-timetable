@@ -53,7 +53,10 @@ export default function Home({ timetableData }: { timetableData: Timetable }) {
   return (
     <Layout home>
       <Head>
-        <title>{siteTitle}</title>
+        <title>
+          {router.query.q ? `${router.query.q} - ` : ""}
+          {siteTitle}
+        </title>
       </Head>
       <section>
         <Search
