@@ -18,7 +18,9 @@ const TableComponent = ({ data }: { data: Timetable }) => {
           title="Location"
           dataIndex="location"
           key="location"
-          render={(value, _, __) => <Location key={value} location={value} />}
+          render={(value, _, __) => (
+            <Location key={value} location={value} showMap />
+          )}
         />
         <Column title="Time" dataIndex="time" key="time" />
         {/* <Column title="Day" dataIndex="day" key="day" width={100} /> */}
