@@ -1,20 +1,20 @@
 import timetableEvents from "./timetable_subj.json";
 
 export interface FullEvent {
-  class_code: string;
-  description: string;
-  day: string;
-  start: string;
-  finish: string;
-  duration: string;
-  weeks: string;
-  location: string | null;
-  class_dates: string;
-  start_date: string;
-  subj_code: string;
-  subj_name: string;
-  day_no: number;
-  subj: string;
+  c: string; // class_code
+  d: string; // description
+  td: string; // day
+  ts: string; // start
+  tf: string; // finish
+  dd: string; // duration
+  w: string; // weeks
+  l: string | null; // location
+  cd: string; // class_dates
+  sd: string; // start_date
+  sc: string; // subj_code
+  sn: string; // subj_name
+  dn: number; // day_no
+  s: string; // subj
 }
 
 export const fullTimetable = timetableEvents as FullEvent[];
@@ -32,15 +32,15 @@ export type Timetable = Event[];
 
 export function getTimetableData() {
   const timetable = fullTimetable
-  .sort((a, b) => a.start.localeCompare(b.start))
-  .sort((a, b) => a.day_no - b.day_no)
-  .sort((a, b) => a.location?.localeCompare(b.location))
+  .sort((a, b) => a.ts.localeCompare(b.ts))
+  .sort((a, b) => a.dn - b.dn)
+  .sort((a, b) => a.l?.localeCompare(b.l))
   .map((event: FullEvent) => ({
-    class_code: event.class_code,
-    location: event.location || "Online",
-    subj_name: event.subj_name,
-    subj_code: event.subj_code,
-    time: `${event.day} ${event.start} - ${event.finish}`,
+    class_code: event.c,
+    location: event.l || "Online",
+    subj_name: event.sn,
+    subj_code: event.sc,
+    time: `${event.td} ${event.ts} - ${event.tf}`,
   }));
 
   return timetable as Timetable;
